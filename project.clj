@@ -4,8 +4,8 @@
   :license {:name "MIT"
             :url "https://spdx.org/licenses/MIT.html"}
   :dependencies [[org.clojure/clojure "1.10.1"],
-                 [org.clojure/tools.cli "1.0.194"]
-                 ]
+                 [org.clojure/tools.cli "1.0.194"]]
+  :plugins [[lein-cloverage "1.2.1"]]
   :main com.github.philipmw.clebs.start
   :aot [com.github.philipmw.clebs.start]
   :jvm-opts ["--illegal-access=deny"]

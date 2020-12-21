@@ -31,7 +31,7 @@ See a sample evidence file at `./test/data/evidence.xml`.
 
 The *plan* file has the critical path for your project.
 
-For now, _clebs_ assumes you'll execute exactly one task at a time from your plan until
+For now, **clebs** assumes you'll execute exactly one task at a time from your plan until
 the project is finished.  Thus, the task order and dependencies do not matter.
 
 The plan's estimated times are in unitless real numbers, just like the evidence times.
@@ -88,6 +88,8 @@ Development:
     $ lein run
 
     $ lein run --evidence ./test/data/evidence.xml --plan ./test/data/plan.xml
+
+    $ lein cloverage
 
 Release:
 
