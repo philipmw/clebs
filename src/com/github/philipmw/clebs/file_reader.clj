@@ -23,31 +23,49 @@
 (defn- get-evidence-tasks
   "Verify top-level XML structure and return the set of evidence tasks"
   [whole-xml]
-  ;(println "Whole XML:" whole-xml)
   (if (= :evidence (get whole-xml :tag))
     (get whole-xml :content)
-    (throw (Error. "expected top-level XML element to be 'evidence'"))))
+    (throw (IllegalArgumentException. "expected top-level XML element to be `evidence`"))))
 
 (defn- get-plan-tasks
   "Verify top-level XML structure and return the set of plan tasks"
   [whole-xml]
-  ;(println "Whole XML:" whole-xml)
   (if (= :plan (get whole-xml :tag))
     (get whole-xml :content)
-    (throw (Error. "expected top-level XML element to be 'evidence'"))))
+    (throw (IllegalArgumentException. "expected top-level XML element to be `plan`"))))
+
+(defn- read-clebs-format-version
+  "Read clebs file format version of the evidence or plan file"
+  [whole-xml]
+  (let [format (get (get whole-xml :attrs) :clebs-format)]
+    (if (nil? format)
+      (throw (IllegalArgumentException. "expected top-level XML element to have `clebs-format` attribute"))
+      format)))
+
+(defn- read-evidence-v1
+  "Read in v1 format of evidence file"
+  [whole-xml]
+  (let [tasks-xml (get-evidence-tasks whole-xml)]
+    (map xml-task-to-native tasks-xml)))
 
 (defn read-evidence
   "Read in the evidence file"
   [evidence-filename]
-  (let [whole-xml (clojure.xml/parse (FileInputStream. evidence-filename))
-        tasks-xml (get-evidence-tasks whole-xml)]
-    ;(println "Tasks XML:" tasks-xml)
+  (let [whole-xml (clojure.xml/parse (FileInputStream. evidence-filename))]
+    (if (= "1" (read-clebs-format-version whole-xml))
+      (read-evidence-v1 whole-xml)
+      (throw (IllegalArgumentException. "evidence file supports only clebs-format=1")))))
+
+(defn- read-plan-v1
+  "Read in v1 format of plan file"
+  [whole-xml]
+  (let [tasks-xml (get-plan-tasks whole-xml)]
     (map xml-task-to-native tasks-xml)))
 
 (defn read-plan
   "Read in the plan file"
   [plan-filename]
-  (let [whole-xml (clojure.xml/parse (FileInputStream. plan-filename))
-        tasks-xml (get-plan-tasks whole-xml)]
-    ;(println "Tasks XML:" tasks-xml)
-    (map xml-task-to-native tasks-xml)))
+  (let [whole-xml (clojure.xml/parse (FileInputStream. plan-filename))]
+    (if (= "1" (read-clebs-format-version whole-xml))
+      (read-plan-v1 whole-xml)
+      (throw (IllegalArgumentException. "plan file supports only clebs-format=1")))))
