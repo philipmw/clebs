@@ -47,20 +47,22 @@
         idx (- ordinal-rank 1)]
     (vec idx)))
 
-(defn friendly-dur
+(defn friendly-dur-gen
   "Duration in a human-friendly format"
-  [dur]
-  (cond
-    (pos? (.toHoursPart dur))
-    (format "%d days, %d hours" (.toDaysPart dur) (.toHoursPart dur))
-    :else
-    (format "%d days" (.toDaysPart dur))
-    )
-  )
+  [workdayDur]
+  (if (nil? workdayDur)
+    (fn [dur]
+      ; Why not days? Because days are too easy to confuse with workdays.
+      (format "%d hours" (.toHours dur)))
+    (fn [dur]
+      ; For workdays, I divide manually instead of using `.dividedBy` because
+      ; `.dividedBy` rounds down, whereas I want to round up to be conservative.
+      (format "%.0f workdays (%s)" (Math/ceil (/ (.getSeconds dur) (.getSeconds workdayDur))) dur))))
 
 (defn run-ebs [options]
-  (let [{:keys [evidence plan]} options
-        rng (Random.)]
+  (let [{:keys [evidence plan workday]} options
+        rng (Random.)
+        friendly-dur (friendly-dur-gen workday)]
     (let [evidence-tasks (read-evidence evidence)
           plan-tasks (read-plan plan)]
       (println "You estimated your project to take" (friendly-dur (plan-sum plan-tasks)))

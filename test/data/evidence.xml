@@ -2,20 +2,20 @@
 <evidence clebs-format="1">
   <task>
     <name>estimated two days, took two days</name>
+    <estDate>2020-12-23</estDate>
     <estDur>P2D</estDur>
-    <startDt>2020-12-23</startDt>
-    <finishDt>2020-12-25</finishDt>
+    <actualDur>P2D</actualDur>
   </task>
   <task>
     <name>estimated two days, took three days</name>
+    <estDate>2020-12-23</estDate>
     <estDur>P2D</estDur>
-    <startDt>2020-12-23</startDt>
-    <finishDt>2020-12-26</finishDt>
+    <actualDur>P3D</actualDur>
   </task>
   <task>
     <name>estimated 12 hours, took 10 hours</name>
+    <estDate>2020-12-23</estDate>
     <estDur>PT12H</estDur>
-    <startDt>2020-12-23T08:00</startDt>
-    <finishDt>2020-12-23T18:00</finishDt>
+    <actualDur>PT10H</actualDur>
   </task>
 </evidence>

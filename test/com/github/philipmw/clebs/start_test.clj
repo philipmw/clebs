@@ -1,6 +1,7 @@
 (ns com.github.philipmw.clebs.start-test
   (:require [clojure.test :refer :all]
-            [com.github.philipmw.clebs.start :refer :all]))
+            [com.github.philipmw.clebs.start :refer :all])
+  (:import [java.time Duration]))
 
 (deftest validate-args-test
   (testing "--help"
@@ -22,6 +23,14 @@
           {:keys [action exit-message]} (validate-args args)]
       (is (nil? exit-message))
       (is (= "simulate" action))
+      ))
+
+  (testing "action=simulate, valid files, and valid workday"
+    (let [args '("simulate" "--evidence" "./test/data/evidence.xml" "--plan" "./test/data/plan.xml" "--workday" "PT6H")
+          {:keys [action exit-message options]} (validate-args args)]
+      (is (nil? exit-message))
+      (is (= "simulate" action))
+      (is (= (Duration/ofHours 6) (get options :workday)))
       ))
 
   (testing "action=simulate and invalid evidence"

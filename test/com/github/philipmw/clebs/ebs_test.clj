@@ -44,8 +44,10 @@
   (testing "p50"
     (is (= 35 (pN [15, 20, 35, 40, 50] 50)))))
 
-(deftest friendly-dur-test
-  (testing "duration with hours"
-    (is (= "1 days, 3 hours" (friendly-dur (Duration/ofHours 27)))))
-  (testing "duration with whole days"
-    (is (= "2 days" (friendly-dur (Duration/ofDays 2))))))
+(deftest friendly-dur-gen-test
+  (testing "duration with 5-hour workday"
+    (let [friendly-dur (friendly-dur-gen (Duration/ofHours 5))]
+      (is (= "6 workdays (PT27H)" (friendly-dur (Duration/ofHours 27))))))
+  (testing "duration without workday"
+    (let [friendly-dur (friendly-dur-gen nil)]
+      (is (= "48 hours" (friendly-dur (Duration/ofDays 2)))))))

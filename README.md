@@ -21,13 +21,11 @@ Download the JAR from GitHub, or build it yourself using instructions below.
 
 ### 2. create the evidence
 
-The *evidence* file has your past estimates and actual times for tasks.
-The estimates are expressed as [ISO 8601 durations](https://en.wikipedia.org/wiki/ISO_8601#Durations),
-and actual times are calculated from your start and finish timestamps.
-The start and finish timestamps are expressed as
-[ISO 8601 dates](https://en.wikipedia.org/wiki/ISO_8601#Dates),
-and, optionally,
-[times](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
+The *evidence* file has your past estimates and actual durations for tasks.
+The estimates and actual durations are expressed as
+[ISO 8601 durations](https://en.wikipedia.org/wiki/ISO_8601#Durations),
+and the dates of estimation are expressed as
+[ISO 8601 dates](https://en.wikipedia.org/wiki/ISO_8601#Dates).
 
 See a sample evidence file at `./test/data/evidence.xml`.
 
@@ -46,19 +44,30 @@ See a sample plan file at `./test/data/plan.xml`.
 
     $ java -jar clebs.jar \
         simulate \
+        --workday PT8H \
         --evidence evidence.xml \
         --plan project.xml
 
 Sample output:
 
-    You estimated your project to take 3 days, 1 hours
+    You estimated your project to take 9 workdays (PT73H)
     Simulating 10000 executions of your project...
-    p5 execution: 2 days, 13 hours
-    p50 execution: 3 days, 5 hours
-    p95 execution: 4 days, 13 hours
+    p5 execution: 8 workdays (PT61H)
+    p50 execution: 10 workdays (PT77H)
+    p95 execution: 14 workdays (PT109H)
 
-If any of this does not make sense, please re-read Joel Spolsky's
-[*Evidence-Based Scheduling*](https://www.joelonsoftware.com/2007/10/26/evidence-based-scheduling/).
+This means:
+
+> You estimated the project to take 9 workdays.
+> Given your past, you may be right.
+> In the best case (5th percentile), it may actually take you only 8 workdays.
+> In the average case (50th percentile), it'll take you 10 workdays.
+> In the worst case (95th percentile), it'll take as long as 14 workdays.
+
+The _workday_ is a customizable duration, 8 hours in this example, to help make sense
+of the total duration in the context of normal office work.  **clebs** internally deals
+with durations that are not aware of when you are sleeping versus working on the project.
+Unless your project involves non-stop work, always set the _workday_ value.
 
 ## Feedback, contributions
 

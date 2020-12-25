@@ -2,8 +2,8 @@
   (:require [clojure.string :as string]
             [clojure.java.io :refer [file]]
             [clojure.tools.cli :refer [parse-opts]]
-            [com.github.philipmw.clebs.ebs :refer [run-ebs]]
-            )
+            [com.github.philipmw.clebs.ebs :refer [run-ebs]])
+  (:import [java.time Duration])
   (:gen-class))
 
 (def cli-options
@@ -16,6 +16,11 @@
     :parse-fn #(file %1)
     :validate [#(.canRead %1) "Cannot read given plan file"]
     ]
+
+   [nil "--workday <duration>" "Workday duration"
+    :parse-fn #(Duration/parse %1)
+    ]
+
    ["-h" "--help"]])
 
 (defn- usage [options-summary]

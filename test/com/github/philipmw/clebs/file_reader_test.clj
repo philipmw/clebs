@@ -1,5 +1,5 @@
 (ns com.github.philipmw.clebs.file-reader-test
-  (:import [java.time Duration LocalDateTime])
+  (:import [java.time Duration LocalDate])
   (:require [clojure.test :refer :all]
             [com.github.philipmw.clebs.file-reader :refer :all]))
 
@@ -7,19 +7,16 @@
   (testing "good evidence"
     (let [test-input-filename "./test/data/evidence.xml"
           expected-evidence `({:name "estimated two days, took two days"
+                               :estDate ~(LocalDate/of 2020 12 23)
                                :estDur ~(Duration/ofDays 2)
-                               :startDt ~(LocalDateTime/of 2020 12 23 0 0)
-                               :finishDt ~(LocalDateTime/of 2020 12 25 0 0)
                                :actualDur ~(Duration/ofDays 2)}
                               {:name "estimated two days, took three days"
+                               :estDate ~(LocalDate/of 2020 12 23)
                                :estDur ~(Duration/ofDays 2)
-                               :startDt ~(LocalDateTime/of 2020 12 23 0 0)
-                               :finishDt ~(LocalDateTime/of 2020 12 26 0 0)
                                :actualDur ~(Duration/ofDays 3)}
                               {:name "estimated 12 hours, took 10 hours"
+                               :estDate ~(LocalDate/of 2020 12 23)
                                :estDur ~(Duration/ofHours 12)
-                               :startDt ~(LocalDateTime/of 2020 12 23 8 0)
-                               :finishDt ~(LocalDateTime/of 2020 12 23 18 0)
                                :actualDur ~(Duration/ofHours 10)}
                               )]
       (is (= expected-evidence (read-evidence test-input-filename))))

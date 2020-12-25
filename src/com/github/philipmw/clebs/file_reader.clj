@@ -1,19 +1,9 @@
 (ns com.github.philipmw.clebs.file-reader
   (:require [clojure.xml])
   (:import [java.io FileInputStream]
-           [java.time Duration LocalDate LocalDateTime LocalTime]
-           [java.time.format DateTimeFormatter DateTimeParseException]
+           [java.time Duration LocalDate]
+           [java.time.format DateTimeFormatter]
            ))
-
-(defn- parse-datetime
-  "Parse several different formats of timestamps from our files"
-  [dtStr]
-  ; We want to support dates both with and without time components.
-  (try
-    (LocalDateTime/from (.parse DateTimeFormatter/ISO_LOCAL_DATE_TIME dtStr))
-    (catch DateTimeParseException e
-      ; if we couldn't parse as date/time, try parsing as just date
-      (LocalDateTime/of (LocalDate/from (.parse DateTimeFormatter/ISO_LOCAL_DATE dtStr)) (LocalTime/MIN)))))
 
 ; For now, we use the same function for both evidence and plan.
 ; It works as long as the two files don't give the same name to different shapes.
@@ -21,15 +11,10 @@
   [task-map]
   (let [k (get task-map :tag)
         v (first (get task-map :content))]
-    (cond (= :startDt k) [k (parse-datetime v)]
-          (= :finishDt k) [k (parse-datetime v)]
+    (cond (= :estDate k) [k (LocalDate/from (.parse DateTimeFormatter/ISO_LOCAL_DATE v))]
           (= :estDur k) [k (Duration/parse v)]
+          (= :actualDur k) [k (Duration/parse v)]
           true [k v])))
-
-(defn- augment-evidence-task
-  "Augment evidence task object with computed properties"
-  [task]
-  (assoc task :actualDur (Duration/between (get task :startDt) (get task :finishDt))))
 
 (defn- xml-task-to-native
   "Convert XML `task` element to native data structure"
@@ -63,8 +48,7 @@
   "Read in v1 format of evidence file"
   [whole-xml]
   (let [tasks-xml (get-evidence-tasks whole-xml)]
-    (map augment-evidence-task
-         (map xml-task-to-native tasks-xml))))
+    (map xml-task-to-native tasks-xml)))
 
 (defn read-evidence
   "Read in the evidence file"
