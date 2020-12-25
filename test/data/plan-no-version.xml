@@ -1,13 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plan>
-  <task>
-    <date>2020-10-24</date>
-    <name>some name 2</name>
-    <estimatedTime>1</estimatedTime>
-  </task>
-  <task>
-    <date>2020-10-24</date>
-    <name>some name</name>
-    <estimatedTime>1</estimatedTime>
-  </task>
 </plan>

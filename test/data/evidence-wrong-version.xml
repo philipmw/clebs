@@ -1,15 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <evidence clebs-format="2">
-  <task>
-    <date>2020-10-24</date>
-    <name>some name 2</name>
-    <estimatedTime>1</estimatedTime>
-    <actualTime>1</actualTime>
-  </task>
-  <task>
-    <date>2020-10-24</date>
-    <name>some name</name>
-    <estimatedTime>1</estimatedTime>
-    <actualTime>1.5</actualTime>
-  </task>
 </evidence>

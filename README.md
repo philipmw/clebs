@@ -22,8 +22,12 @@ Download the JAR from GitHub, or build it yourself using instructions below.
 ### 2. create the evidence
 
 The *evidence* file has your past estimates and actual times for tasks.
-The estimates and actual times are in unitless real numbers;
-these may be your hours, days, or weeks; you decide, just be consistent.
+The estimates are expressed as [ISO 8601 durations](https://en.wikipedia.org/wiki/ISO_8601#Durations),
+and actual times are calculated from your start and finish timestamps.
+The start and finish timestamps are expressed as
+[ISO 8601 dates](https://en.wikipedia.org/wiki/ISO_8601#Dates),
+and, optionally,
+[times](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
 
 See a sample evidence file at `./test/data/evidence.xml`.
 
@@ -34,7 +38,7 @@ The *plan* file has the critical path for your project.
 For now, **clebs** assumes you'll execute exactly one task at a time from your plan until
 the project is finished.  Thus, the task order and dependencies do not matter.
 
-The plan's estimated times are in unitless real numbers, just like the evidence times.
+The plan's estimates are in ISO 8601 durations, just like the evidence estimates.
 
 See a sample plan file at `./test/data/plan.xml`.
 
@@ -47,23 +51,14 @@ See a sample plan file at `./test/data/plan.xml`.
 
 Sample output:
 
-    You estimated your project to take 2.0 units of time.
-    Simulating 10000 executions of your plan...
-    Fastest execution: 2.0
-    p50 execution: 2.5
-    p90 execution: 3.0
-    p99 execution: 3.0
-    Slowest execution: 3.0
+    You estimated your project to take 3 days, 1 hours
+    Simulating 10000 executions of your project...
+    p5 execution: 2 days, 13 hours
+    p50 execution: 3 days, 5 hours
+    p95 execution: 4 days, 13 hours
 
-One possible interpretation of this output:
-
-> You estimated that your project will take two weeks.
-> Given your history (evidence), you may be right; in the best case it'll take you two weeks.
-> But in the average case, it'll take you two-and-a-half weeks,
-> and in the worst case, it'll take you three weeks.
-
-If any of this does not make sense, remember that this README assumes you've read
-through Joel Spolsky's [*Evidence-Based Scheduling*](https://www.joelonsoftware.com/2007/10/26/evidence-based-scheduling/).
+If any of this does not make sense, please re-read Joel Spolsky's
+[*Evidence-Based Scheduling*](https://www.joelonsoftware.com/2007/10/26/evidence-based-scheduling/).
 
 ## Feedback, contributions
 

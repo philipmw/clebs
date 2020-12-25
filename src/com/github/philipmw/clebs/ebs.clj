@@ -1,20 +1,21 @@
 (ns com.github.philipmw.clebs.ebs
-  (:require [com.github.philipmw.clebs.file-reader :refer :all])
-  (:import (java.util Random)))
+  (:require [com.github.philipmw.clebs.file-reader :refer [read-evidence read-plan]])
+  (:import [java.time Duration]
+           [java.util Random]))
 
 (def ^:const NUM_SIMULATED_EXECUTIONS 10000)
 
 (defn velocities
   "Compute velocities of evidence tasks"
   [evidence-tasks]
-  (let [taskActualTime #(get %1 :actualTime)
-        taskEstimatedTime #(get %1 :estimatedTime)]
-    (map #(/ (taskEstimatedTime %1) (taskActualTime %1)) evidence-tasks)))
+  (let [actualDurSecs #(.toSeconds (get %1 :actualDur))
+        estDurSecs #(.toSeconds (get %1 :estDur))]
+    (map #(/ (estDurSecs %1) (actualDurSecs %1)) evidence-tasks)))
 
 (defn plan-sum
   "Compute sum of time estimated for planned tasks"
   [plan-tasks]
-  (reduce #(+ %1 (get %2 :estimatedTime)) 0 plan-tasks))
+  (reduce #(.plus %1 (get %2 :estDur)) Duration/ZERO plan-tasks))
 
 (defn- select-random
   "Select a random item from the given vector"
@@ -25,16 +26,18 @@
 (defn simulated-execution
   "Generate a simulated execution of the plan, using a random selection of velocities"
   [rng velocities plan-tasks]
-  (let [estimates (map #(get %1 :estimatedTime) plan-tasks)
+  (let [estimates (map #(get %1 :estDur) plan-tasks)
         velo-vec (vec velocities)]                          ; vector for constant-time random access
-    (map #(/ %1 (select-random rng velo-vec)) estimates)))
+    ; ideally we'd use `Duration/dividedBy`, but that takes only long, not double.
+    ; We need double so that Duration can increase.
+    (map #(Duration/ofSeconds (/ (.toSeconds %1) (select-random rng velo-vec))) estimates)))
 
-(defn- sum [xs] (reduce + xs))
+(defn- sumDur [xs] (reduce #(.plus %1 %2) xs))
 
 (defn n-estimates
   "Generate N simulated estimates of plan completion"
   [rng velocities plan-tasks n]
-  (map (fn [x] (sum (simulated-execution rng velocities plan-tasks))) (range n)))
+  (map (fn [x] (sumDur (simulated-execution rng velocities plan-tasks))) (range n)))
 
 (defn pN
   "Find the Nth percentile"
@@ -44,18 +47,27 @@
         idx (- ordinal-rank 1)]
     (vec idx)))
 
+(defn friendly-dur
+  "Duration in a human-friendly format"
+  [dur]
+  (cond
+    (pos? (.toHoursPart dur))
+    (format "%d days, %d hours" (.toDaysPart dur) (.toHoursPart dur))
+    :else
+    (format "%d days" (.toDaysPart dur))
+    )
+  )
+
 (defn run-ebs [options]
   (let [{:keys [evidence plan]} options
         rng (Random.)]
     (let [evidence-tasks (read-evidence evidence)
           plan-tasks (read-plan plan)]
-      (println "You estimated your project to take" (plan-sum plan-tasks) "units of time.")
-      (println "Simulating" NUM_SIMULATED_EXECUTIONS "executions of your plan...")
+      (println "You estimated your project to take" (friendly-dur (plan-sum plan-tasks)))
+      (println "Simulating" NUM_SIMULATED_EXECUTIONS "executions of your project...")
       (let [velocities (velocities evidence-tasks)
             sorted-est-vec (vec (sort (n-estimates rng velocities plan-tasks NUM_SIMULATED_EXECUTIONS)))]
-        (println "Fastest execution:" (first sorted-est-vec))
-        (println "p50 execution:" (pN sorted-est-vec 50))
-        (println "p90 execution:" (pN sorted-est-vec 90))
-        (println "p99 execution:" (pN sorted-est-vec 99))
-        (println "Slowest execution:" (last sorted-est-vec))
+        (println "p5 execution:" (friendly-dur (pN sorted-est-vec 5)))
+        (println "p50 execution:" (friendly-dur (pN sorted-est-vec 50)))
+        (println "p95 execution:" (friendly-dur (pN sorted-est-vec 95)))
         ))))

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plan clebs-format="1">
   <task>
-    <date>2020-10-24</date>
-    <name>some name 2</name>
-    <estimatedTime>1</estimatedTime>
+    <name>hour-long task</name>
+    <estDur>PT1H</estDur>
   </task>
   <task>
-    <date>2020-10-24</date>
-    <name>some name</name>
-    <estimatedTime>1</estimatedTime>
+    <name>day-long task</name>
+    <estDur>P1D</estDur>
+  </task>
+  <task>
+    <name>two-day-long task</name>
+    <estDur>P2D</estDur>
   </task>
 </plan>
