@@ -87,7 +87,7 @@ Development:
 
     $ lein run
 
-    $ lein run --evidence ./test/data/evidence.xml --plan ./test/data/plan.xml
+    $ lein run simulate --evidence ./test/data/evidence.xml --plan ./test/data/plan.xml
 
     $ lein cloverage
 

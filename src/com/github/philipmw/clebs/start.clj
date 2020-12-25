@@ -21,7 +21,10 @@
 (defn- usage [options-summary]
   (->> ["== CL Evidence-Based Scheduling =="
         ""
-        "Usage: clebs [options]"
+        "Usage: clebs action [options]"
+        ""
+        "Actions:"
+        "  simulate   Simulate the project with the given evidence"
         ""
         "Options:"
         options-summary]
@@ -31,17 +34,20 @@
   (str "The following errors occurred in parsing command-line arguments:\n\n"
        (string/join \newline errors)))
 
-(defn- validate-args [args]
+(defn validate-args [args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
     (cond
       (:help options)
       {:exit-message (usage summary) :ok? true}
+
       errors
       {:exit-message (error-msg errors)}
+
       (and (contains? options :evidence)
            (contains? options :plan)
-           (= 0 (count arguments)))
-      {:options options}
+           (= 1 (count arguments)))
+      {:action (first arguments) :options options}
+
       :else
       {:exit-message (usage summary)}
       )))
@@ -51,8 +57,10 @@
   (System/exit status))
 
 (defn -main [& args]
-  (let [{:keys [options exit-message ok?]} (validate-args args)]
+  (let [{:keys [action options exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (run-ebs options)
+      (if (= "simulate" action)
+        (run-ebs options)
+        (throw (IllegalArgumentException. "Action is not recognized.")))
       )))
