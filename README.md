@@ -3,7 +3,8 @@
 **clebs** is a project estimator based on Joel Spolsky's [*Evidence-Based Scheduling*](https://www.joelonsoftware.com/2007/10/26/evidence-based-scheduling/).
 This README and project assume you've read that article and have become familiar with the concepts and terms.
 
-The "cl" in **clebs** stands for command-line, or Clojure, or both.
+The "cl" in **clebs** stands for [command-line](https://en.wikipedia.org/wiki/Command-line_interface),
+or [Clojure](https://clojure.org), or both.
 
 ## Usage
 
@@ -68,6 +69,21 @@ The _workday_ is a customizable duration, 8 hours in this example, to help make 
 of the total duration in the context of normal office work.  **clebs** internally deals
 with durations that are not aware of when you are sleeping versus working on the project.
 Unless your project involves non-stop work, always set the _workday_ value.
+
+## Comparison to OmniPlan
+
+[OmniPlan](https://www.omnigroup.com/omniplan) is a commercial project management tool.
+With the _Pro_ license, it offers to
+[use simulations to estimate project completion](https://support.omnigroup.com/documentation/omniplan/mac/4.2.2/en/gantt-view/#using-simulations-to-estimate-milestone-completion-pro).
+
+On the whole, **OmniPlan** is a much more comprehensive and user-friendly tool than **clebs**.
+But **clebs**' strength is using _evidence_ to simulate a range of task durations,
+whereas **OmniPlan** uses a fixed range such as 50% -- 150%.
+
+Using _evidence_ from developers allows for more accurate project completion estimates than
+using a fixed range.  See the
+[*Evidence-Based Scheduling*](https://www.joelonsoftware.com/2007/10/26/evidence-based-scheduling/)
+article for the rationale.
 
 ## Feedback, contributions
 
