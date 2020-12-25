@@ -14,3 +14,12 @@ jobs:
       run: lein deps
     - name: Run tests
       run: lein test
+
+    - name: Produce coverage data
+      run: lein cloverage --lcov
+
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ./target/coverage/lcov.info

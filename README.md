@@ -75,6 +75,7 @@ I welcome your ideas or code for making it better.
 ## Development
 
 ![Continuous Integration status](https://github.com/philipmw/clebs/workflows/Clojure%20CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/philipmw/clebs/badge.svg?branch=main)](https://coveralls.io/github/philipmw/clebs?branch=main)
 
 I develop this software on macOS, using [Intellij IDEA](https://www.jetbrains.com/idea/)
 and [Cursive](https://cursive-ide.com/) IntelliJ plugin.
