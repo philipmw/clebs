@@ -70,6 +70,15 @@ of the total duration in the context of normal office work.  **clebs** internall
 with durations that are not aware of when you are sleeping versus working on the project.
 Unless your project involves non-stop work, always set the _workday_ value.
 
+## Tracking your time
+
+If you track your time precisely, in hours or minutes, here are some tools to consider.
+All these tools do not have a monthly subscription.
+
+* iOS/ iPadOS: [MultiTimer](https://apps.apple.com/us/app/multitimer-multiple-timers/id973421278)
+* macOS: [Caato Time Tracker](http://www.caato.de/en/products/time-tracker-for-mac.html) (I have not personally tried it.)
+* CLI: [wtime](http://wtime.sourceforge.net/)
+
 ## Comparison to OmniPlan
 
 [OmniPlan](https://www.omnigroup.com/omniplan) is a commercial project management tool.
