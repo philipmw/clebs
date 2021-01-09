@@ -44,7 +44,7 @@ See a sample plan file at `./test/data/plan.xml`.
 ### 4. estimate
 
     $ java -jar clebs.jar \
-        simulate \
+        estimate \
         --workday PT8H \
         --evidence evidence.xml \
         --plan project.xml

@@ -65,7 +65,7 @@
   (let [{:keys [action options exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
-      (if (= "simulate" action)
+      (if (= "estimate" action)
         (run-ebs options)
         (throw (IllegalArgumentException. "Action is not recognized.")))
       )))
